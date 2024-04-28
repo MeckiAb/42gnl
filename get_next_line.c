@@ -6,7 +6,7 @@
 /*   By: labderra <labderra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:49:32 by labderra          #+#    #+#             */
-/*   Updated: 2024/04/27 19:27:20 by labderra         ###   ########.fr       */
+/*   Updated: 2024/04/28 13:50:41 by labderra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE + 1] = "\0";
+	static char	buffer[BUFFER_SIZE + 1] = {0};
 	int			i;
 	char		*result;
 	int			j;
@@ -27,47 +27,38 @@ char	*get_next_line(int fd)
 		return (NULL);
 	i = 0;
 	j = 0;
-	size = BUFFER_SIZE;
+	size = BUFFER_SIZE + 1;
 	result = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!result)
 		return (NULL);
-	result[BUFFER_SIZE] = 0;
-	buffer[BUFFER_SIZE] = 0;
+	result = ft_memset(result, 0, BUFFER_SIZE + 1);
 	while (1)
 	{
 		while (buffer[i] != '\n' && j < size && buffer[i])
 		{
 			result[j++] = buffer[i++];
 		}
-		if (buffer[i] == '\n')
+		if (j >= size)
 		{
-			ft_memmove(&buffer[0], &buffer[i + 1], BUFFER_SIZE - i);
-			result[j++] = '\n';
-			result[j++] = '\0';
-			return (result);
-		}
-		else if (j == size)
-		{
-			aux = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1 + j));
+			aux = (char *)malloc(sizeof(char) * (BUFFER_SIZE + j));
 			if (!aux)
 				return (NULL);
 			size = size + BUFFER_SIZE;
-//printf("\nnew result - size=%d, j=%d, buffer=%s, result=%s", size, j, buffer, result);
-			ft_strlcpy(aux, result, BUFFER_SIZE + 1 + j);
-//printf("\nnew result - size=%d, j=%d, buffer=%s, result=%s, aux=%s", size, j, buffer, result, aux);
+			aux = ft_memset(aux, 0, BUFFER_SIZE + j);
+			aux = ft_memmove(aux, result, j);
 			free(result);
 			result = aux;
-		}		else if (!buffer[i])
+		}
+		else if (!buffer[i])
 		{
 			i = read(fd, buffer, BUFFER_SIZE);
-//printf("\nnew buffer - buf=%s res=%s size=%d i=%d j=%d\n", buffer, result, size, i, j);
-			if (i <= 0 && j == 0)
+			if (i < 0 || (i == 0 && j == 0))
 			{
 				buffer[0] = '\0';
 				free(result);
 				return (NULL);
-			}
-			else if ( i <= 0 && j != 0)
+			}			
+			else if ( i == 0 && j != 0)
 			{
 				buffer[0] = '\0';
 				result[j] = '\0';
@@ -76,6 +67,25 @@ char	*get_next_line(int fd)
 			buffer[i] = '\0';
 			i = 0;
 		}
-
+		else if (buffer[i] == '\n')
+		{
+			ft_memmove(&buffer[0], &buffer[i + 1], BUFFER_SIZE - i);
+			result[j++] = '\n';
+			if (j < size)
+				result[j++] = '\0';
+			else
+			{
+				aux = (char *)malloc(sizeof(char) * (1 + j));
+				if (!aux)
+					return (NULL);
+				size = size + 1;
+				aux = ft_memset(aux, 0, 1 + j);
+				aux = ft_memmove(aux, result, j);
+				free(result);
+				result = aux;
+				result[j] = 0;
+			}
+			return (result);
+		}
 	}
 }

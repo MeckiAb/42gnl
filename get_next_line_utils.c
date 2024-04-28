@@ -6,37 +6,11 @@
 /*   By: labderra <labderra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:46:09 by labderra          #+#    #+#             */
-/*   Updated: 2024/04/26 16:47:39 by labderra         ###   ########.fr       */
+/*   Updated: 2024/04/28 13:23:12 by labderra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
-
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
-{
-	size_t	i;
-
-	if (dstsize == 0)
-		return (ft_strlen(src));
-	i = 0;
-	while (i < dstsize - 1 && src[i])
-	{
-		dst[i] = src[i];
-		i++;
-	}
-	dst[i] = 0;
-	return (ft_strlen(src));
-}
 
 void	*ft_memmove(void *dst, const void *src, size_t len)
 {
@@ -55,4 +29,14 @@ void	*ft_memmove(void *dst, const void *src, size_t len)
 		i++;
 	}
 	return (ptr);
+}
+
+void	*ft_memset(void *b, int c, size_t len)
+{
+	unsigned char	*ptr;
+
+	ptr = (unsigned char *)b;
+	while (len-- > 0)
+		ptr[len] = (unsigned char)c;
+	return (b);
 }
