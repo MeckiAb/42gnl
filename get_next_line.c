@@ -57,17 +57,18 @@ static char	*gnl_return(size_t i, char **buffer, size_t size)
 
 	p = NULL;
 	if (size == 0)
-		return (free(*buffer), buffer = NULL, NULL);
+		return (free(*buffer), *buffer = NULL, NULL);
 	else if (i == size)
 		return (swp = *buffer, *buffer = NULL, swp);
-	else if (*buffer[i] == '\n')
+	else if ((*buffer)[i] == '\n')
 	{
 		swp = (char *)calloc(sizeof(char), size - i);
-		p = (char *)calloc(sizeof(char), i + 1);
+		p = (char *)calloc(sizeof(char), i + 2);
 		if (!p || !swp)
-			return (free(*buffer), NULL);
-		swp = ft_memmove(p, &(*buffer[i + 1]), size - i);
-		p = ft_memmove(swp, &(*buffer[0]), i + 1);
+			return (free(*buffer), *buffer = NULL, NULL);
+		swp = ft_memmove(swp, &(*buffer[i + 1]), size - i);
+		p = ft_memmove(p, &(*buffer[0]), i + 1);
+		p[i + 1] = 0;
 		free(*buffer);
 		*buffer = swp;
 	}
@@ -82,6 +83,7 @@ char	*get_next_line(int fd)
 
 	if (!gnl_init(fd, &buffer, &size, &i))
 		return (NULL);
+//printf ("gnl_init i:%lu buffer:%s size:%lu\n", i, buffer, size);
 	while (buffer[i] != '\n')
 	{
 		while (buffer[i] != '\n' && i < size)
@@ -93,6 +95,6 @@ char	*get_next_line(int fd)
 				break ;
 		}
 	}
+//printf ("gnl i:%lu buffer:%s size:%lu\n", i, buffer, size);
 	return (gnl_return(i, &buffer, size));
-//return ("fin");
 }

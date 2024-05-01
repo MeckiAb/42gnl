@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: labderra <labderra@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: labderra <labderra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:46:09 by labderra          #+#    #+#             */
-/*   Updated: 2024/05/01 01:50:17 by labderra         ###   ########.fr       */
+/*   Updated: 2024/05/01 13:03:40 by labderra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	*ft_memmove(void *dst, const void *src, size_t len)
 	size_t	i;
 
 	i = 0;
-	if (!dst && !src)
+	if (!dst || !src)
 		return (NULL);
 	ptr = (char *)dst;
 	while (src <= dst && len--)
