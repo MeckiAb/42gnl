@@ -6,7 +6,7 @@
 /*   By: labderra <labderra@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:46:09 by labderra          #+#    #+#             */
-/*   Updated: 2024/04/28 18:53:51 by labderra         ###   ########.fr       */
+/*   Updated: 2024/05/01 01:50:17 by labderra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,26 @@ void	*ft_memmove(void *dst, const void *src, size_t len)
 	return (ptr);
 }
 
-void	*ft_memset(void *b, int c, size_t len)
+void	*ft_calloc(size_t count, size_t size)
 {
-	unsigned char	*ptr;
+	char	*p;
+	size_t	i;
 
-	ptr = (unsigned char *)b;
-	while (len-- > 0)
-		ptr[len] = (unsigned char)c;
-	return (b);
+	i = count * size;
+	p = malloc(i);
+	if (!p)
+		return (NULL);
+	while (i-- > 0)
+		p[i] = 0;
+	return ((void *)p);
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
 }
