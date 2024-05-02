@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: labderra <labderra@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: labderra <labderra@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:46:09 by labderra          #+#    #+#             */
-/*   Updated: 2024/05/01 22:34:16 by labderra         ###   ########.fr       */
+/*   Updated: 2024/05/02 11:58:44 by labderra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,29 @@ size_t	ft_strlen(const char *s)
 	while (s[i])
 		i++;
 	return (i);
+}
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*p;
+	size_t	i;
+	size_t	size;
+
+	if (start >= ft_strlen(s))
+		size = 0;
+	else if (ft_strlen(s) - start < len)
+		size = ft_strlen(s) - start;
+	else
+		size = len;
+	p = (char *)malloc(sizeof(char) * (size + 1));
+	if (!p)
+		return (NULL);
+	i = 0;
+	while (i < size)
+	{
+		p[i] = s[i + start];
+		i++;
+	}
+	p[i] = '\0';
+	return (p);
 }

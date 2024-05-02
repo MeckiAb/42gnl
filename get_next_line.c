@@ -22,7 +22,10 @@ static char	*gnl_load(int fd, char *buffer, size_t *size)
 		return (NULL);
 	bytes_loaded = read(fd, &p[*size], BUFFER_SIZE);
 	if (bytes_loaded < 0)
-		return (free(p), NULL);
+	{
+		*size = 0;
+		return (free(p), free(buffer), NULL);
+	}
 	if (!buffer)
 	{
 		*size = bytes_loaded;
@@ -36,7 +39,8 @@ static char	*gnl_load(int fd, char *buffer, size_t *size)
 static char	*gnl_init(int fd, char **buffer, size_t *size, size_t *i)
 {
 	if (read(fd, 0, 0) == -1)
-		return (NULL);
+		return (free(*buffer), *buffer = NULL, NULL);
+	*i = 0;
 	if (*buffer == NULL)
 	{
 		*size = 0;
@@ -46,7 +50,6 @@ static char	*gnl_init(int fd, char **buffer, size_t *size, size_t *i)
 	}
 	else
 		*size = ft_strlen(*buffer);
-	*i = 0;
 	return (*buffer);
 }
 
@@ -59,23 +62,20 @@ static char	*gnl_return(size_t i, char **buffer, size_t size)
 		return (free(*buffer), *buffer = NULL, NULL);
 	else if (i == size)
 	{
-		p = (char *)calloc(sizeof(char), size);
+		p = ft_substr(*buffer, 0, size);
 		if (!p)
 			return (free(*buffer), *buffer = NULL, NULL);
-		p = ft_memmove(p, &(*buffer[0]), size);
 		return (free(*buffer), *buffer = NULL, p);
 	}
-	else if ((*buffer)[i] == '\n')
+	else
 	{
-		swp = (char *)calloc(sizeof(char), size - i);
-		p = (char *)calloc(sizeof(char), i + 2);
+		swp = ft_substr(*buffer, i + 1, size - i);
+		p = ft_substr(*buffer, 0, i + 1);
 		if (!p || !swp)
 			return (free(p), free(swp), free(*buffer), *buffer = NULL, NULL);
-		swp = ft_memmove(swp, &(*buffer[i + 1]), size - i);
-		p = ft_memmove(p, &(*buffer[0]), i + 1);
-		p[i + 1] = 0;
+		return (free(*buffer), *buffer = swp, p);
 	}
-	return (free(*buffer), *buffer = swp, p);
+	return (NULL);
 }
 
 char	*get_next_line(int fd)
@@ -86,7 +86,6 @@ char	*get_next_line(int fd)
 
 	if (!gnl_init(fd, &buffer, &size, &i))
 		return (NULL);
-//printf ("gnl_init i:%lu buffer:%s size:%lu\n", i, buffer, size);
 	while (buffer[i] != '\n')
 	{
 		while (buffer[i] != '\n' && i < size)
@@ -94,10 +93,9 @@ char	*get_next_line(int fd)
 		if (i == size)
 		{
 			buffer = gnl_load(fd, buffer, &size);
-			if (size == i)
+			if (size == i || size == 0)
 				break ;
 		}
 	}
-//printf ("gnl i:%lu buffer:%s size:%lu\n", i, buffer, size);
 	return (gnl_return(i, &buffer, size));
 }
