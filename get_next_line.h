@@ -6,14 +6,14 @@
 /*   By: labderra <labderra@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:46:42 by labderra          #+#    #+#             */
-/*   Updated: 2024/05/01 11:02:56 by labderra         ###   ########.fr       */
+/*   Updated: 2024/05/01 22:26:22 by labderra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 40
+#  define BUFFER_SIZE 42
 # endif
 # include <stdlib.h>
 # include <unistd.h>

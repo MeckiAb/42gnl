@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: labderra <labderra@student.42.fr>          +#+  +:+       +#+        */
+/*   By: labderra <labderra@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:46:09 by labderra          #+#    #+#             */
-/*   Updated: 2024/05/01 13:03:40 by labderra         ###   ########.fr       */
+/*   Updated: 2024/05/01 22:34:16 by labderra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

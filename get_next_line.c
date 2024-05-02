@@ -28,7 +28,7 @@ static char	*gnl_load(int fd, char *buffer, size_t *size)
 		*size = bytes_loaded;
 		return (p);
 	}
-	p = ft_memmove(p, buffer, *size);	
+	p = ft_memmove(p, buffer, *size);
 	*size = ft_strlen(p);
 	return (free(buffer), p);
 }
@@ -55,24 +55,27 @@ static char	*gnl_return(size_t i, char **buffer, size_t size)
 	char	*p;
 	char	*swp;
 
-	p = NULL;
 	if (size == 0)
 		return (free(*buffer), *buffer = NULL, NULL);
 	else if (i == size)
-		return (swp = *buffer, *buffer = NULL, swp);
+	{
+		p = (char *)calloc(sizeof(char), size);
+		if (!p)
+			return (free(*buffer), *buffer = NULL, NULL);
+		p = ft_memmove(p, &(*buffer[0]), size);
+		return (free(*buffer), *buffer = NULL, p);
+	}
 	else if ((*buffer)[i] == '\n')
 	{
 		swp = (char *)calloc(sizeof(char), size - i);
 		p = (char *)calloc(sizeof(char), i + 2);
 		if (!p || !swp)
-			return (free(*buffer), *buffer = NULL, NULL);
+			return (free(p), free(swp), free(*buffer), *buffer = NULL, NULL);
 		swp = ft_memmove(swp, &(*buffer[i + 1]), size - i);
 		p = ft_memmove(p, &(*buffer[0]), i + 1);
 		p[i + 1] = 0;
-		free(*buffer);
-		*buffer = swp;
 	}
-	return (p);
+	return (free(*buffer), *buffer = swp, p);
 }
 
 char	*get_next_line(int fd)
